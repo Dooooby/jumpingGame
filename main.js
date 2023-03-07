@@ -41,12 +41,13 @@ class Cactus { //장애물 생성, class생성 일반적
 let timer = 0;
 let cactuses = []; //장애물 여러개일때 array 담아 관리
 let jumpingTimer = 0;
+let animation;
 
  let cactus = new Cactus();
 //  cactus.draw()
 
  function frameA() { //애니메이션, 1초에 60번 실행 내장함수
-    requestAnimationFrame(frameA);
+    animation = requestAnimationFrame(frameA);
     timer++;
     
     ctx.clearRect(0,0, canvas.width, canvas.height)
@@ -63,6 +64,8 @@ let jumpingTimer = 0;
             o.splice(i,1)
         }//x좌표가 0미만이면 제거
         a.x--;
+
+        dcBreak(dino, a); //충돌체크
         a.draw();
     }) //반복문으로 장애물 돌려
 
@@ -85,6 +88,7 @@ let jumpingTimer = 0;
     dino.draw();
  }
 
+
  frameA(); //함수실행필수!!!!
 
  var jumping = false;
@@ -94,3 +98,12 @@ let jumpingTimer = 0;
         jumping = true;
     }
  })
+
+ function dcBreak(dino, cactus) {
+    let xDegree = cactus.x - (dino.x + dino.width);
+    let yDegree = cactus.y - (dino.y + dino.height);
+    if(xDegree < 0 && yDegree < 0) {
+        ctx.clearRect(0,0, canvas.width, canvas.height)
+        cancelAnimationFrame(animation)
+    }
+ }
